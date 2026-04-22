@@ -28,7 +28,7 @@ def upgrade():
         sa.Column(
             "hashed_password", sqlmodel.sql.sqltypes.AutoString(), nullable=False
         ),
-        sa.PrimaryKeyConstraint("id"),
+        sa.PrimaryKeyConstraint("id", name="user_pkey"),
     )
     op.create_index(op.f("ix_user_email"), "user", ["email"], unique=True)
     op.create_table(
@@ -40,8 +40,9 @@ def upgrade():
         sa.ForeignKeyConstraint(
             ["owner_id"],
             ["user.id"],
+            name="item_owner_id_fkey",
         ),
-        sa.PrimaryKeyConstraint("id"),
+        sa.PrimaryKeyConstraint("id", name="item_pkey"),
     )
     # ### end Alembic commands ###
 

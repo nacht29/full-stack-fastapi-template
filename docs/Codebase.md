@@ -1,6 +1,6 @@
 # Codebase Overview
 
-This project is a full-stack application template with a FastAPI backend, PostgreSQL database, React TypeScript frontend, generated API client, Docker Compose development stack, and automated backend/frontend tests.
+This project is a full-stack application template with a FastAPI backend, MySQL database, React TypeScript frontend, generated API client, Docker Compose development stack, and automated backend/frontend tests.
 
 The main idea is simple: the backend owns the data model and HTTP API, FastAPI publishes an OpenAPI schema, the frontend generates a typed client from that schema, and React screens call the generated client through TanStack Query.
 
@@ -40,7 +40,7 @@ The API router is assembled in `backend/app/api/main.py`. It includes login, use
 
 - `SECRET_KEY`,
 - `FIRST_SUPERUSER`,
-- PostgreSQL connection settings,
+- MySQL connection settings,
 - CORS origins,
 - SMTP/email settings,
 - Sentry DSN,
@@ -203,7 +203,7 @@ bunx playwright test
 
 `compose.yml` defines the main services:
 
-- `db`: PostgreSQL database.
+- `db`: MySQL database.
 - `prestart`: runs startup tasks before the backend starts.
 - `backend`: FastAPI API server.
 - `frontend`: production-built frontend served by Nginx.
@@ -264,7 +264,7 @@ Learn Python functions, classes, type hints, virtual environments, package manag
 
 Learn path operations, dependency injection, request bodies, response models, automatic OpenAPI docs, and validation. Map those ideas to `backend/app/api/routes`, `backend/app/api/deps.py`, and `backend/app/models.py`.
 
-### 4. SQLModel, PostgreSQL, and Alembic
+### 4. SQLModel, MySQL, and Alembic
 
 Learn tables, primary keys, foreign keys, relationships, sessions, selects, inserts, updates, deletes, and migrations. Practice by modifying `User` or `Item`, creating a migration, and updating tests.
 

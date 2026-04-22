@@ -21,14 +21,14 @@ docker compose -f compose.yml up
 
 ### `db`
 
-The `db` service runs PostgreSQL 18.
+The `db` service runs MySQL 8.4.
 
 It configures:
 
-- persistent storage through the `app-db-data` volume,
-- a healthcheck using `pg_isready`,
+- persistent storage through the `app-mysql-data` volume,
+- a healthcheck using `mysqladmin ping`,
 - database settings from `.env`,
-- required `POSTGRES_PASSWORD`, `POSTGRES_USER`, and `POSTGRES_DB` variables.
+- required `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD`, `MYSQL_USER`, and `MYSQL_DB` variables.
 
 Other services depend on this healthcheck before starting database-backed work.
 
@@ -62,7 +62,7 @@ It configures:
 
 - the backend image and `backend/Dockerfile` build,
 - environment variables from `.env`,
-- PostgreSQL connection settings pointing at the `db` service,
+- MySQL connection settings pointing at the `db` service,
 - a healthcheck at `/api/v1/utils/health-check/`,
 - dependency ordering on both `db` and `prestart`,
 - Traefik routing for `api.${DOMAIN}`.
@@ -90,7 +90,7 @@ The container serves the frontend internally on port `80`, and Traefik forwards 
 
 ### Networks and Volumes
 
-The base file defines the `app-db-data` volume for PostgreSQL data.
+The base file defines the `app-mysql-data` volume for MySQL data.
 
 It also declares the `traefik-public` network as external:
 
@@ -141,10 +141,10 @@ The local override changes `db` from a production-style service to a local one:
 ```yaml
 restart: "no"
 ports:
-  - "5432:5432"
+  - "${MYSQL_HOST_PORT:-3307}:3306"
 ```
 
-This exposes PostgreSQL directly on `localhost:5432` and prevents Docker from automatically restarting it after it exits.
+This exposes MySQL directly on `localhost:3307` by default and prevents Docker from automatically restarting it after it exits. Set `MYSQL_HOST_PORT=3306` if you specifically want to expose it on the standard MySQL host port and nothing else is already using that port.
 
 ### `adminer` Override
 
@@ -291,7 +291,7 @@ This lets the local `proxy` service and application services share the same netw
 
 When running the default local Compose setup, the effective stack includes:
 
-- PostgreSQL at `localhost:5432`,
+- MySQL at `localhost:3307`,
 - Adminer at `http://localhost:8080`,
 - backend API at `http://localhost:8000`,
 - frontend at `http://localhost:5173`,

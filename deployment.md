@@ -147,10 +147,16 @@ Set the `DOMAIN`, by default `localhost` (for development), but when deploying y
 export DOMAIN=fastapi-project.example.com
 ```
 
-Set the `POSTGRES_PASSWORD` to something different than `changethis`:
+Set the `MYSQL_PASSWORD` to something different than `changethis`:
 
 ```bash
-export POSTGRES_PASSWORD="changethis"
+export MYSQL_PASSWORD="changethis"
+```
+
+Set the `MYSQL_ROOT_PASSWORD` to something different than `changethis`:
+
+```bash
+export MYSQL_ROOT_PASSWORD="changethis"
 ```
 
 Set the `SECRET_KEY`, used to sign tokens:
@@ -183,10 +189,10 @@ You can set several other environment variables:
 * `SMTP_USER`: The SMTP server user to send emails.
 * `SMTP_PASSWORD`: The SMTP server password to send emails.
 * `EMAILS_FROM_EMAIL`: The email account to send emails from.
-* `POSTGRES_SERVER`: The hostname of the PostgreSQL server. You can leave the default of `db`, provided by the same Docker Compose. You normally wouldn't need to change this unless you are using a third-party provider.
-* `POSTGRES_PORT`: The port of the PostgreSQL server. You can leave the default. You normally wouldn't need to change this unless you are using a third-party provider.
-* `POSTGRES_USER`: The Postgres user, you can leave the default.
-* `POSTGRES_DB`: The database name to use for this application. You can leave the default of `app`.
+* `MYSQL_SERVER`: The hostname of the MySQL server. You can leave the default of `db`, provided by the same Docker Compose. You normally wouldn't need to change this unless you are using a third-party provider.
+* `MYSQL_PORT`: The port of the MySQL server. You can leave the default. You normally wouldn't need to change this unless you are using a third-party provider.
+* `MYSQL_USER`: The MySQL user, you can leave the default.
+* `MYSQL_DB`: The database name to use for this application. You can leave the default of `app`.
 * `SENTRY_DSN`: The DSN for Sentry, if you are using it.
 
 ## GitHub Actions Environment Variables
@@ -301,7 +307,8 @@ The current Github Actions workflows expect these secrets:
 * `EMAILS_FROM_EMAIL`
 * `FIRST_SUPERUSER`
 * `FIRST_SUPERUSER_PASSWORD`
-* `POSTGRES_PASSWORD`
+* `MYSQL_PASSWORD`
+* `MYSQL_ROOT_PASSWORD`
 * `SECRET_KEY`
 * `LATEST_CHANGES`
 * `SMOKESHOW_AUTH_KEY`

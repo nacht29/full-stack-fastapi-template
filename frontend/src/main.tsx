@@ -19,7 +19,16 @@ OpenAPI.TOKEN = async () => {
 }
 
 const handleApiError = (error: Error) => {
-  if (error instanceof ApiError && [401, 403].includes(error.status)) {
+  if (!(error instanceof ApiError)) {
+    return
+  }
+
+  const errorDetail = (error.body as { detail?: unknown } | undefined)?.detail
+  const isInvalidSession =
+    [401, 403].includes(error.status) ||
+    (error.status === 404 && errorDetail === "User not found")
+
+  if (isInvalidSession) {
     localStorage.removeItem("access_token")
     window.location.href = "/login"
   }

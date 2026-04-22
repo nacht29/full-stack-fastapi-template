@@ -1,5 +1,6 @@
 import logging
 
+# sqlmodel creates a sqlalchemy Engine under the hood
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
@@ -21,8 +22,10 @@ wait_seconds = 1
 )
 def init(db_engine: Engine) -> None:
     try:
+        # Create a session for the SQLAlchemy Engine created in main().
         with Session(db_engine) as session:
             # Try to create session to check if DB is awake
+            # Run a small query to test if the DB is ready to receive data.
             session.exec(select(1))
     except Exception as e:
         logger.error(e)
@@ -31,6 +34,7 @@ def init(db_engine: Engine) -> None:
 
 def main() -> None:
     logger.info("Initializing service")
+    # engine is created in app/core/db.py; SQLModel creates a SQLAlchemy Engine.
     init(engine)
     logger.info("Service finished initializing")
 

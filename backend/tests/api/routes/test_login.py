@@ -1,3 +1,4 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
@@ -5,7 +6,7 @@ from pwdlib.hashers.bcrypt import BcryptHasher
 from sqlmodel import Session
 
 from app.core.config import settings
-from app.core.security import get_password_hash, verify_password
+from app.core.security import create_access_token, get_password_hash, verify_password
 from app.crud import create_user
 from app.models import User, UserCreate
 from app.utils import generate_password_reset_token
@@ -44,6 +45,16 @@ def test_use_access_token(
     result = r.json()
     assert r.status_code == 200
     assert "email" in result
+
+
+def test_use_access_token_rejects_non_uuid_subject(client: TestClient) -> None:
+    access_token = create_access_token("not-a-uuid", expires_delta=timedelta(minutes=5))
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    r = client.post(f"{settings.API_V1_STR}/login/test-token", headers=headers)
+
+    assert r.status_code == 403
+    assert r.json() == {"detail": "Could not validate credentials"}
 
 
 def test_recovery_password(
